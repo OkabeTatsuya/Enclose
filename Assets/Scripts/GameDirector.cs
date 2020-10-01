@@ -198,11 +198,36 @@ public class GameDirector : MonoBehaviour
     {
         if (m_truePropObj[1] != null)
         {
+            Vector3 setPos = new Vector3(0.0f, 0.0f, 0.0f);
+            Vector3 setRot = new Vector3(0.0f, 0.0f, 0.0f);
+            Vector3 setRot1 = new Vector3(0.0f, 0.0f, 0.0f);
+
+            Vector3 propPos0 = m_truePropObj[0].transform.position.normalized;
+            Vector3 propPos1 = m_truePropObj[1].transform.position.normalized;
+
+            float dx = propPos0.x + propPos1.x;
+            float dy = propPos0.y + propPos1.y;
+
+
+            setPos = Vector3.Lerp(m_truePropObj[0].transform.position, m_truePropObj[1].transform.position, 0.5f);
+
+            float numA = propPos0.x >= propPos1.x ? propPos0.x : propPos1.x;
+            //float numB = propPos0.x >= propPos1.x ? propPos0.x : propPos1.x;
+
+            Vector3 vecA = new Vector3(numA, setPos.y, 0.0f);
+            float interiorAngle = (propPos0.x * propPos1.x) + (propPos0.y * propPos1.y);
+            //float interiorAngle = (propPos0.x * propPos1.x) + (propPos0.y * propPos1.y);
+
+            float rad = Mathf.Acos(interiorAngle);
+            setRot1.y = Mathf.Atan2(dy, dx) * 0.5f;
+            setRot.y = interiorAngle * (180 / Mathf.PI);
+
             m_lineObj[0].SetActive(true);
-            m_lineRenderer[0].SetPosition(0, m_truePropObj[0].transform.position);
-            m_lineRenderer[0].SetPosition(1, m_truePropObj[1].transform.position);
+            m_lineObj[0].transform.position = setPos;
+            m_lineObj[0].transform.eulerAngles = setRot; 
             m_lineRenderer[0].startWidth = 0.5f;
             m_lineRenderer[0].endWidth = 0.5f;
+            Debug.Log(rad);
         }
         else
         {
